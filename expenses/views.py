@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.db.models import Sum 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from.serializers import ExpenseSerializer, UserSerializer, CategorySerializer
+from .serializers import ExpenseSerializer, UserSerializer, CategorySerializer
 
 from.models import Expense, User, Category
 
