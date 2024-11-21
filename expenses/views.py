@@ -27,6 +27,25 @@ class ExpenseViewSet(viewsets.ModelViewSet):
                 return Response({'error': str(e)}, status=500)
         else:
             return Response({'error': 'All parameters are required'}, status=400)
+        
+    @action(detail=False, methods=['get'])
+    def category_summary(self, request):
+        user_id = request.query_params.get('user_id')
+        month = request.query_params.get('month') #format YYYY-MD
+
+        if user_id and month:
+            try:
+                year, month = month.split('-')
+                expenses = self.get_queryset().filter(user_id=user_id, date__year=year, date__month=month)
+                summary = expenses.values('category').annotate(total=sum('amount'))
+                return Response(summary, status=200)
+
+            except Exception as e:
+                return Response({'error': str(e)}, status=500)
+        else:
+            return Response({'error': 'All parameters are required'}, status=400)
+
+
 
 
 
