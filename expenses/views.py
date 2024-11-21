@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-
+from django.db.models import Sum 
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from.serializers import ExpenseSerializer, UserSerializer, CategorySerializer
@@ -37,7 +37,7 @@ class ExpenseViewSet(viewsets.ModelViewSet):
             try:
                 year, month = month.split('-')
                 expenses = self.get_queryset().filter(user_id=user_id, date__year=year, date__month=month)
-                summary = expenses.values('category').annotate(total=sum('amount'))
+                summary = expenses.values('category').annotate(total=Sum('amount'))
                 return Response(summary, status=200)
 
             except Exception as e:
